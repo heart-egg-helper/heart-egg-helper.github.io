@@ -1,52 +1,79 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>心语蛋 - 情绪孵化智能伴侣</title>
-    <style>
-        body {
-            font-family: 'Microsoft YaHei', sans-serif;
-            max-width: 800px;
-            margin: 40px auto;
-            padding: 30px;
-            line-height: 1.6;
-            background-color: #f9f9f9;
-            color: #333;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-        }
-        h1 {
-            color: #ff6b8b;
-            text-align: center;
-            margin-bottom: 10px;
-        }
-        .subtitle {
-            text-align: center;
-            color: #666;
-            font-size: 1.2em;
-            margin-bottom: 30px;
-        }
-        .status {
-            background-color: #e7f7e7;
-            padding: 15px;
-            border-radius: 10px;
-            border-left: 5px solid #4CAF50;
-            margin: 25px 0;
-        }
-        a {
-            color: #2196F3;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-        .emoji {
-            font-size: 1.3em;
-        }
-    </style>
+<title>心语蛋 - 多模态演示</title>
+<meta charset="UTF-8">
+<style>
+body { font-family: 'Microsoft YaHei', sans-serif; max-width: 800px; margin: 40px auto; padding: 20px; background: #f9f9f9; }
+h1 { color: #ff6b8b; text-align: center; }#hardwarePanel {
+  position: fixed; right: 20px; top: 50%; transform: translateY(-50%);
+  background: white; padding: 15px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  width: 150px; text-align: center;
+}#touchButton {
+  width: 70px; height: 70px; border-radius: 50%; background: #ff6b8b; border: none;
+  color: white; font-size: 16px; margin: 10px auto; display: block; cursor: pointer;
+}
+#lightStrip { height: 20px; background: #333; border-radius: 10px; margin: 10px 0; padding: 5px; }.light { width: 14px; height: 14px; border-radius: 50%; margin: 0 2px; display: inline-block; background: #555; }
+#talkArea { background: white; padding: 20px; border-radius: 10px; margin-top: 20px; }
+input, button { padding: 8px; margin: 5px; }
+</style>
 </head>
-<body>
-    <h1><span class="emoji">🥚</span> 心语蛋 - 情绪孵化智能伴侣</h1>
-    <p class="subtitle">🌱 温柔陪伴每一位孩子 
+<body><div id="hardwarePanel">
+  <h4>🧩 多模态演示</h4>
+  <button id="touchButton">触摸</button>
+  <div id="status">状态: 待机</div>
+  <div>情绪灯带:</div>
+  <div id="lightStrip">
+    <div class="light"></div><div class="light"></div><div class="light"></div>
+  </div>
+</div><h1>🥚 心语蛋 - 情绪孵化智能伴侣</h1>
+<p style="text-align:center;">🌱 温柔陪伴每一位孩子 |基于AI的双输出情绪支持系统</p><div id="talkArea">
+  <h3>💬 与AI“艾娃”对话</h3>
+  <p>1. 点击右侧“触摸”按钮唤醒。</p>
+  <p>2. 输入带情绪的句子（如“我害怕”）。</p>
+  <input type="text" id="userInput" placeholder="输入：我害怕 / 我开心 ..." style="width:70%;">
+  <button id="sendButton">发送</button>
+  <div id="response" style="margin-top:15px; padding:10px; background:#f0f0f0; border-radius:5px; min-height:50px;">
+    等待对话...
+  </div>
+</div><div style="margin-top:30px; font-size:0.9em; color:#666; text-align:center;">
+  <p>本演示模拟“触摸-光语”多模态交互闭环。</p>
+  <p>访问 <a href="https://github.com/heart-egg-helper/heart-egg-helper.github.io">GitHub仓库</a></p>
+</div>
+
+<script>
+const touchBtn = document.getElementById('touchButton');
+const lights = document.querySelectorAll('.light');
+const statusDiv = document.getElementById('status');
+const sendBtn = document.getElementById('sendButton');
+const userInput = document.getElementById('userInput');
+const responseDiv = document.getElementById('response');
+
+touchBtn.onclick = function() {
+  statusDiv.innerHTML = '状态: 已唤醒';
+  statusDiv.style.color = 'green';
+  this.disabled = true;
+  setTimeout(() => { this.disabled = false; }, 1000);
+};
+
+sendBtn.onclick = function() {
+  const text = userInput.value;
+  if (!text) return;
+  
+  let emotion = '一般', color = '#32CD32';
+  if (text.includes('害怕')) { emotion = '害怕'; color = '#6495ED'; }
+  else if (text.includes('开心')) { emotion = '开心'; color = '#FFD700'; }
+  else if (text.includes('生气')) { emotion = '生气'; color = '#FF4500'; }
+  else if (text.includes('难过')) { emotion = '难过'; color = '#4682B4'; }
+  
+  lights.forEach(light => { light.style.backgroundColor = color; });
+  
+  const reply = `艾娃：“检测到<strong>${emotion}</strong>情绪。让我们一起面对它。同时，我已生成情绪简报给家长。”`;
+  responseDiv.innerHTML = `<p>${reply}</p><p><em>（家长简报已发送：情绪分析 & 指导建议）</em></p>`;
+  
+  statusDiv.innerHTML = `状态: 回应 ${emotion}`;
+};
+</script>
+
+</body>
+</html>
